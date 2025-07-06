@@ -1,6 +1,6 @@
 package com.management;
 
-import com.management.Service.StudentAndGradeService;
+import com.management.service.StudentAndGradeService;
 import com.management.models.CollegeStudent;
 import com.management.repository.StudentDao;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestPropertySource("/application.properties")
 @SpringBootTest
-public class StudentAndGradeServiceTest {
+public class StudentAndGradeService_1Test {
 
     @Autowired
     private JdbcTemplate jdbc;

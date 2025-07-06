@@ -1,4 +1,4 @@
-package com.management.Service;
+package com.management.service;
 
 import com.management.models.CollegeStudent;
 import com.management.repository.StudentDao;
@@ -47,7 +47,7 @@ public class StudentAndGradeService{
 
     public Iterable<CollegeStudent> getGradebook() {
         Iterable<CollegeStudent> collegeStudents = studentDao.findAll();
-//        findAll方法是由CrudRepository接口提供的，它返回一个包含所有CollegeStudent对象的可迭代集合。
+//       findAll方法是由CrudRepository接口提供的，它返回一个包含所有CollegeStudent对象的可迭代集合。
         if (collegeStudents == null) {
             System.out.println("No students found in the gradebook.");
         } else {
