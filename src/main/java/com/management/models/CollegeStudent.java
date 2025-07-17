@@ -32,7 +32,7 @@ public class CollegeStudent implements Student {
     public CollegeStudent() {
     }
 
-    public CollegeStudent(String firstname, String lastmame, String emailAddress) {
+    public CollegeStudent(String firstname, String lastname, String emailAddress) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.emailAddress = emailAddress;
