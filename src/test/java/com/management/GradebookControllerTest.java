@@ -26,8 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +45,7 @@ public class GradebookControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private StudentAndGradeService studentAndGradeServiceMock;
+    private StudentAndGradeService studentCreateServiceMock;
 
     @Autowired
     private StudentDao studentDao;
@@ -76,9 +75,9 @@ public class GradebookControllerTest {
 
         List<CollegeStudent> collegeStudentList = new ArrayList<>(Arrays.asList(studentOne, studentTwo));
 
-        when(studentAndGradeServiceMock.getGradebook()).thenReturn(collegeStudentList);
+        when(studentCreateServiceMock.getGradebook()).thenReturn(collegeStudentList);
 
-        assertIterableEquals(collegeStudentList, studentAndGradeServiceMock.getGradebook());
+        assertIterableEquals(collegeStudentList, studentCreateServiceMock.getGradebook());
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk()).andReturn();
@@ -89,7 +88,48 @@ public class GradebookControllerTest {
 
     }
 
-    
+    @Test
+    public void createStudentHttpRequest() throws Exception{
+
+        CollegeStudent studentOne = new CollegeStudent("Eric", "Roby",
+                "eric.roby@luv2code_school.com");
+
+        List<CollegeStudent> collegeStudentList = new ArrayList<>(Arrays.asList(studentOne));
+
+        when(studentCreateServiceMock.getGradebook()).thenReturn(collegeStudentList);
+
+        assertIterableEquals(collegeStudentList, studentCreateServiceMock.getGradebook());
+
+        MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders.post("/")
+                .param("firstname", request.getParameterValues("firstname"))
+                .param("lastname", request.getParameterValues("lastname"))
+                .param("emailAddress", request.getParameterValues("emailAddress"))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        ModelAndView mav = mvcResult.getModelAndView();
+        ModelAndViewAssert.assertViewName(mav, "index");
+
+        CollegeStudent verifiedStudent = studentDao.findByEmailAddress("chad.darby@luv2code_school.com");
+
+        assertNotNull(verifiedStudent, "Student should not be null");
+    }
+
+    @Test
+    public void deleteStudentHttpRequest() throws Exception {
+
+        assertTrue(studentDao.existsById(1), "Student with ID 1 should exist before deletion");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/delete/student/{id}",1))
+                .andExpect(status().isOk()).andReturn();
+
+        ModelAndView mav = mvcResult.getModelAndView();
+
+        ModelAndViewAssert.assertViewName(mav,"index");
+
+        assertFalse(studentDao.findById(1).isPresent(), "Student with ID 1 should not exist after deletion");
+
+
+    }
 
     @AfterEach
     public void setupAfterTransaction() {
