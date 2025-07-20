@@ -1,1 +1,1 @@
-# springboot-helloworld
+# student-management
